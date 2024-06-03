@@ -22,4 +22,5 @@ from routers import router
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include((router.urls))),
+    path('api/application/export/', include('applications.urls')),
 ]

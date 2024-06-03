@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/loaders'
-import { useFetch } from '@/lib/fetch.ts'
+import { useFetch } from '@/lib/fetch'
 import { columns } from '@/components/datatables/columns'
 import DataTable from '@/components/datatables/DataTable.vue'
 

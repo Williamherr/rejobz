@@ -3,8 +3,10 @@ import DropdownAction from '@/components/datatables/DataTableDropDown.vue'
 import { h } from 'vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import DataTableColumnHeader from '@/components/datatables/DataTableColumnHeader.vue'
+import { Button } from '../ui/button'
+import { downloadExcel } from '@/actions/download'
 
-interface Applications {
+export interface Applications {
   id: string
   jobId?: string
   position: string
@@ -67,7 +69,18 @@ export const columns: ColumnDef<Applications>[] = [
   },
   {
     id: 'actions',
-    enableHiding: false,
+    header: ({ table }) =>
+      h(
+        Button,
+        {
+          onClick: () => {
+            const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original)
+            downloadExcel(selectedRows)
+          }
+        },
+        'btn'
+      ),
+
     cell: ({ row }) => {
       const application = row.original
 
@@ -78,6 +91,8 @@ export const columns: ColumnDef<Applications>[] = [
           application
         })
       )
-    }
+    },
+
+    enableHiding: false
   }
 ]

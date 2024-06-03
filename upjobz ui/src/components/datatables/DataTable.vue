@@ -15,7 +15,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useVueTable,
-  VisibilityState
+  type VisibilityState
 } from '@tanstack/vue-table'
 
 import {

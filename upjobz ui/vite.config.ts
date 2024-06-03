@@ -21,7 +21,7 @@ export default defineConfig({
     }
   },
   server: {
-    host: 'localhost',
-    port: 8000 // Set the port to 8000
+    host: '127.0.0.1',
+    port: 3000 // Set the port to 8000
   }
 })
