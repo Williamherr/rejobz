@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Jobs from '@/views/Jobs.vue'
+import Toaster from '@/components/ui/toast/Toaster.vue'
 </script>
 
 <template>
@@ -7,4 +8,5 @@ import Jobs from '@/views/Jobs.vue'
   <main>
     <Jobs />
   </main>
+  <Toaster />
 </template>

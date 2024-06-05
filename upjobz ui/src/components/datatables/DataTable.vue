@@ -3,10 +3,10 @@ import type { ColumnDef, ColumnFiltersState, SortingState } from '@tanstack/vue-
 
 import { valueUpdater } from '@/lib/utils'
 
-import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
+import { ChevronDown, PlusCircle, PlusIcon } from 'lucide-vue-next'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { h, ref } from 'vue'
+import { nextTick, ref } from 'vue'
 
 import {
   FlexRender,
@@ -33,12 +33,14 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { addApplication } from '@/actions/applications/add'
 
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }>()
 
+const dataTable = ref<TData[]>(props.data)
 const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
 const columnVisibility = ref<VisibilityState>({})
@@ -46,11 +48,12 @@ const rowSelection = ref({})
 
 const table = useVueTable({
   get data() {
-    return props.data
+    return dataTable.value as TData[]
   },
   get columns() {
     return props.columns
   },
+
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
   getSortedRowModel: getSortedRowModel(),
@@ -74,6 +77,30 @@ const table = useVueTable({
     }
   }
 })
+
+const addRowz = async () => {
+  await addRow()
+  // Wait for the next tick to ensure that the table is updated
+}
+const addRow = async () => {
+  console.log('Adding row')
+  table.lastPage()
+  let newRow: any = {
+    jobId: null,
+    position: 'New Job',
+    company: '',
+    dateApplied: new Date().toLocaleDateString(),
+    status: 'Applied',
+    site: ''
+  }
+
+  await addApplication('http://127.0.0.1:8000/api/application/', newRow)
+  dataTable.value = [...dataTable.value, newRow]
+
+  await nextTick()
+  table.lastPage()
+  console.log(table.getRowModel().rows)
+}
 </script>
 
 <template>
@@ -151,6 +178,9 @@ const table = useVueTable({
         {{ table.getFilteredSelectedRowModel().rows.length }} of
         {{ table.getFilteredRowModel().rows.length }} row(s) selected.
       </div>
+      <Button variant="outline" size="sm" @click="addRowz"
+        ><PlusIcon class="mr-2" /> Add application</Button
+      >
       <Button
         variant="outline"
         size="sm"

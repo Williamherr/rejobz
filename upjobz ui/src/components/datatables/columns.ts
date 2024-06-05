@@ -1,17 +1,21 @@
-import type { ColumnDef } from '@tanstack/vue-table'
-import DropdownAction from '@/components/datatables/DataTableDropDown.vue'
 import { h } from 'vue'
-import { Checkbox } from '@/components/ui/checkbox'
+
+import DropdownAction from '@/components/datatables/DataTableDropDown.vue'
 import DataTableColumnHeader from '@/components/datatables/DataTableColumnHeader.vue'
-import { Button } from '../ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import { DownloadIcon } from 'lucide-vue-next'
+
 import { downloadExcel } from '@/actions/download'
+
+import type { ColumnDef } from '@tanstack/vue-table'
 
 export interface Applications {
   id: string
   jobId?: string
   position: string
   company: string
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'applied' | 'interviewing' | 'offered' | 'closed'
   site: string
 }
 
@@ -60,6 +64,14 @@ export const columns: ColumnDef<Applications>[] = [
       })
   },
   {
+    accessorKey: 'dateApplied',
+    header: ({ column }) =>
+      h(DataTableColumnHeader, {
+        column: column,
+        title: 'Date Applied'
+      })
+  },
+  {
     accessorKey: 'site',
     header: ({ column }) =>
       h(DataTableColumnHeader, {
@@ -70,16 +82,18 @@ export const columns: ColumnDef<Applications>[] = [
   {
     id: 'actions',
     header: ({ table }) =>
-      h(
-        Button,
-        {
-          onClick: () => {
-            const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original)
-            downloadExcel(selectedRows)
-          }
-        },
-        'btn'
-      ),
+      h('span', { class: 'float-right space-x-2' }, [
+        h(
+          Button,
+          {
+            onClick: () => {
+              const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original)
+              downloadExcel(selectedRows)
+            }
+          },
+          h(DownloadIcon)
+        )
+      ]),
 
     cell: ({ row }) => {
       const application = row.original

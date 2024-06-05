@@ -15,7 +15,7 @@ const { data, error } = useFetch('http://127.0.0.1:8000/api/application/')
     <div v-else-if="data">
       <div class="container py-10 mx-auto">
         <h1>Jobs Applications</h1>
-        <DataTable :columns="columns" :data="data" />
+        <DataTable :columns="columns" :data="data" :addRow="addRow" />
       </div>
     </div>
     <div v-else><Skeleton></Skeleton></div>
