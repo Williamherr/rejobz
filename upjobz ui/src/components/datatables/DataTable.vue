@@ -3,7 +3,7 @@ import type { ColumnDef, ColumnFiltersState, SortingState } from '@tanstack/vue-
 
 import { valueUpdater } from '@/lib/utils'
 
-import { ChevronDown, PlusCircle, PlusIcon } from 'lucide-vue-next'
+import { ChevronDown, PlusIcon } from 'lucide-vue-next'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { nextTick, ref } from 'vue'
@@ -89,17 +89,16 @@ const addRow = async () => {
     jobId: null,
     position: 'New Job',
     company: '',
-    dateApplied: new Date().toLocaleDateString(),
     status: 'Applied',
     site: ''
   }
 
   await addApplication('http://127.0.0.1:8000/api/application/', newRow)
+  newRow.dateApplied = new Date().toLocaleDateString()
   dataTable.value = [...dataTable.value, newRow]
 
   await nextTick()
   table.lastPage()
-  console.log(table.getRowModel().rows)
 }
 </script>
 

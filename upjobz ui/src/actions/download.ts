@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie'
 import type { Applications } from '@/components/datatables/columns'
-import { isNullOrEmpty } from '@/lib/validate'
-import { useToast } from '@/components/ui/toast/use-toast'
+import { isNullOrEmpty, useToastError } from '@/lib/validate'
 
 export const downloadExcel = (data: Applications[]) => {
   const csrftoken: string = Cookies.get('csrftoken') || ''
@@ -32,11 +31,10 @@ export const downloadExcel = (data: Applications[]) => {
 }
 
 const canDownload = (data: Applications[], csrftoken: string): Boolean => {
-  const { toast } = useToast()
   let error = ''
   switch (false) {
     case !isNullOrEmpty(data):
-      error = 'No data to download'
+      error = 'No selected data to download'
       break
     case !isNullOrEmpty(csrftoken):
       error = 'No csrf token found'
@@ -44,11 +42,7 @@ const canDownload = (data: Applications[], csrftoken: string): Boolean => {
   }
 
   if (!isNullOrEmpty(error)) {
-    toast({
-      title: 'Unable to download file',
-      description: error,
-      variant: 'destructive'
-    })
+    useToastError('Unable to download file', error)
   }
 
   return !isNullOrEmpty(error)

@@ -1,7 +1,6 @@
-import { useToast } from '@/components/ui/toast/use-toast'
+import { useToastError } from '@/lib/validate'
 
 export const addApplication = (url: string, data: any) => {
-  const { toast } = useToast()
   fetch(url, {
     method: 'POST',
     headers: {
@@ -12,11 +11,7 @@ export const addApplication = (url: string, data: any) => {
     .then((res) => res.json())
     .then((json) => (data.value = json))
     .catch((err) => {
-      toast({
-        title: 'Unable to download file',
-        description: 'err',
-        variant: 'destructive'
-      })
+      useToastError('Unable to add application', err.message)
       return (err.value = err)
     })
 }

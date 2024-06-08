@@ -1,3 +1,7 @@
+import { useToast } from '@/components/ui/toast'
+
+const { toast } = useToast()
+
 export const isNullOrEmpty = (value: unknown): value is null | undefined | '' | [] => {
   return (
     value === null ||
@@ -5,4 +9,12 @@ export const isNullOrEmpty = (value: unknown): value is null | undefined | '' | 
     value === '' ||
     (Array.isArray(value) && value.length === 0)
   )
+}
+
+export const useToastError = (title: string, msg: string) => {
+  toast({
+    title: title,
+    description: msg,
+    variant: 'destructive'
+  })
 }

@@ -3,8 +3,32 @@ import { Skeleton } from '@/components/loaders'
 import { useFetch } from '@/lib/fetch'
 import { columns } from '@/components/datatables/columns'
 import DataTable from '@/components/datatables/DataTable.vue'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-const { data, error } = useFetch('http://127.0.0.1:8000/api/application/')
+export const useApplications = defineStore('applications', () => {
+  let data: any = ref([])
+  let error: any = ref(null)
+
+  const fetchApplications = async () => {
+    const { data: fetchedData, error: fetchError } = await useFetch(
+      'http://127.0.0.1:8000/api/application/'
+    )
+    if (fetchError) {
+      error.value = fetchError
+    } else {
+      data.value = fetchedData
+    }
+  }
+
+  return {
+    data,
+    error,
+    fetchApplications
+  }
+})
+
+// const { data, error } = useFetch('http://127.0.0.1:8000/api/application/')
 </script>
 
 <template>
@@ -15,7 +39,7 @@ const { data, error } = useFetch('http://127.0.0.1:8000/api/application/')
     <div v-else-if="data">
       <div class="container py-10 mx-auto">
         <h1>Jobs Applications</h1>
-        <DataTable :columns="columns" :data="data" :addRow="addRow" />
+        <DataTable :columns="columns" :data="data" />
       </div>
     </div>
     <div v-else><Skeleton></Skeleton></div>

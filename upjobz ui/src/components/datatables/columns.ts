@@ -12,7 +12,7 @@ import type { ColumnDef } from '@tanstack/vue-table'
 
 export interface Applications {
   id: string
-  jobId?: string
+  jobId: string
   position: string
   company: string
   status: 'applied' | 'interviewing' | 'offered' | 'closed'
@@ -97,7 +97,6 @@ export const columns: ColumnDef<Applications>[] = [
 
     cell: ({ row }) => {
       const application = row.original
-
       return h(
         'div',
         { class: 'relative float-right' },

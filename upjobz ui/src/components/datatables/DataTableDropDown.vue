@@ -10,14 +10,21 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { deleteApplication } from '@/actions/applications/delete'
+import { isNullOrEmpty, useToastError } from '@/lib/validate'
 
 defineProps<{
   application: {
     id: string
+    jobId: string
   }
 }>()
 
 function copy(id: string) {
+  if (isNullOrEmpty(id)) {
+    useToastError('No Job Id', 'This job application does not have a job id.')
+    return
+  }
   navigator.clipboard.writeText(id)
 }
 </script>
@@ -39,7 +46,7 @@ function copy(id: string) {
       <DropdownMenuItem @click=""
         ><span class="flex flex-row gap-2 items-center"><Pencil />Edit</span></DropdownMenuItem
       >
-      <DropdownMenuItem @click=""
+      <DropdownMenuItem @click="deleteApplication(application.id)"
         ><span class="flex flex-row gap-2 items-center"><Trash2 />Delete</span></DropdownMenuItem
       >
     </DropdownMenuContent>
