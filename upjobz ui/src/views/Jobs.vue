@@ -1,42 +1,22 @@
 <script setup lang="ts">
 import { Skeleton } from '@/components/loaders'
-import { useFetch } from '@/lib/fetch'
 import { columns } from '@/components/datatables/columns'
 import DataTable from '@/components/datatables/DataTable.vue'
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { isNullOrEmpty } from '@/lib/validate'
 
-export const useApplications = defineStore('applications', () => {
-  let data: any = ref([])
-  let error: any = ref(null)
-
-  const fetchApplications = async () => {
-    const { data: fetchedData, error: fetchError } = await useFetch(
-      'http://127.0.0.1:8000/api/application/'
-    )
-    if (fetchError) {
-      error.value = fetchError
-    } else {
-      data.value = fetchedData
-    }
-  }
-
-  return {
-    data,
-    error,
-    fetchApplications
-  }
-})
-
-// const { data, error } = useFetch('http://127.0.0.1:8000/api/application/')
+import { inject } from 'vue'
+const application: any = inject('application')
+application.fetchData()
+let data = application.data
+let error = application.error
 </script>
 
 <template>
-  <div class="border-1 border border-red-800 w-full m-auto">
+  <div class="w-full m-auto">
     <div v-if="error">
-      <p>Oops! Error encountered: {{ error.message }}</p>
+      <p>Oops! Error encountered: {{ error }}</p>
     </div>
-    <div v-else-if="data">
+    <div v-else-if="!isNullOrEmpty(data)">
       <div class="container py-10 mx-auto">
         <h1>Jobs Applications</h1>
         <DataTable :columns="columns" :data="data" />

@@ -10,9 +10,11 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { deleteApplication } from '@/actions/applications/delete'
+import { deleteApplication } from '@/actions/application'
 import { isNullOrEmpty, useToastError } from '@/lib/validate'
+import { inject } from 'vue'
 
+const useAppStore: any = inject('application')
 defineProps<{
   application: {
     id: string
@@ -26,6 +28,11 @@ function copy(id: string) {
     return
   }
   navigator.clipboard.writeText(id)
+}
+const deleteApp = async (id: string) => {
+  await deleteApplication(id).then(() => {
+    useAppStore.remove(id)
+  })
 }
 </script>
 
@@ -46,7 +53,7 @@ function copy(id: string) {
       <DropdownMenuItem @click=""
         ><span class="flex flex-row gap-2 items-center"><Pencil />Edit</span></DropdownMenuItem
       >
-      <DropdownMenuItem @click="deleteApplication(application.id)"
+      <DropdownMenuItem @click="deleteApp(application.id)"
         ><span class="flex flex-row gap-2 items-center"><Trash2 />Delete</span></DropdownMenuItem
       >
     </DropdownMenuContent>
