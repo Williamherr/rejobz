@@ -2,6 +2,7 @@
 import { Skeleton } from '@/components/loaders'
 import { columns } from '@/components/datatables/columns'
 import DataTable from '@/components/datatables/DataTable.vue'
+import DataTableEditModal from '@/components/datatables/DataTableEditModal.vue'
 import { isNullOrEmpty } from '@/lib/validate'
 
 import { inject } from 'vue'
@@ -20,6 +21,8 @@ let error = application.error
       <div class="container py-10 mx-auto">
         <h1>Jobs Applications</h1>
         <DataTable :columns="columns" :data="data" />
+        <Button @click="application.editRow('4')">Click</Button>
+        <DataTableEditModal />
       </div>
     </div>
     <div v-else><Skeleton></Skeleton></div>

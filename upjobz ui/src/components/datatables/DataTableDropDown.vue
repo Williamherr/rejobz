@@ -51,7 +51,7 @@ const deleteApp = async (id: string) => {
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem @click=""
-        ><span class="flex flex-row gap-2 items-center"><Pencil />Edit</span></DropdownMenuItem
+        ><span class="flex flex-row gap-2 items-center"><Pencil /> Edit</span></DropdownMenuItem
       >
       <DropdownMenuItem @click="deleteApp(application.id)"
         ><span class="flex flex-row gap-2 items-center"><Trash2 />Delete</span></DropdownMenuItem

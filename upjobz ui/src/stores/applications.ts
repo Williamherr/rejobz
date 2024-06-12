@@ -1,10 +1,11 @@
 import { ref } from 'vue'
 import { useFetch } from '@vueuse/core'
-import type { Applications } from '@/components/datatables/columns'
+import type { Application } from '@/components/datatables/columns'
 
 export const useApplicationStore = () => {
-  const data = ref<Applications[]>([])
+  const data = ref<Application[]>([])
   const error: any = ref(null)
+  const editedRow = ref<Application | null>(null)
 
   const fetchData = async () => {
     try {
@@ -22,13 +23,21 @@ export const useApplicationStore = () => {
     }
   }
 
-  const add = (application: Applications) => {
+  const editRow = (id: string) => {
+    editedRow.value = getById(id)
+  }
+
+  const getById = (id: string) => {
+    return data.value.find((job: Application) => job.id == id) ?? null
+  }
+
+  const add = (application: Application) => {
     console.log('Adding data')
     data.value = [...data.value, application]
   }
 
-  const remove = (id: number) => {
-    data.value = data.value.filter((job: any) => job.id !== id)
+  const remove = (id: string) => {
+    data.value = data.value.filter((job: Application) => job.id != id)
   }
 
   const test = () => {
@@ -41,6 +50,9 @@ export const useApplicationStore = () => {
     fetchData,
     add,
     remove,
-    test
+    test,
+    getById,
+    editRow,
+    editedRow
   }
 }

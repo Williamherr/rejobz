@@ -2,6 +2,8 @@ import { h } from 'vue'
 
 import DropdownAction from '@/components/datatables/DataTableDropDown.vue'
 import DataTableColumnHeader from '@/components/datatables/DataTableColumnHeader.vue'
+import DataTableEditableCells from '@/components/datatables/DataTableEditableCells.vue'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { DownloadIcon } from 'lucide-vue-next'
@@ -10,16 +12,17 @@ import { downloadExcel } from '@/actions/download'
 
 import type { ColumnDef } from '@tanstack/vue-table'
 
-export interface Applications {
+export interface Application {
   id: string
   jobId: string
   position: string
   company: string
   status: 'applied' | 'interviewing' | 'offered' | 'closed'
   site: string
+  dateApplied: string
 }
 
-export const columns: ColumnDef<Applications>[] = [
+export const columns: ColumnDef<Application>[] = [
   {
     id: 'select',
     header: ({ table }) =>
@@ -44,6 +47,13 @@ export const columns: ColumnDef<Applications>[] = [
         column: column,
         title: 'Position',
         disableAll: true
+      })
+    },
+    cell: ({ row }) => {
+      const application = row.original
+      return h(DataTableEditableCells, {
+        value: application.position,
+        id: application.id
       })
     }
   },
@@ -74,7 +84,7 @@ export const columns: ColumnDef<Applications>[] = [
   {
     accessorKey: 'site',
     header: ({ column }) =>
-      h(DataTableColumnHeader, {
+      h(DataTableEditableCells, {
         column: column,
         title: 'Site'
       })
